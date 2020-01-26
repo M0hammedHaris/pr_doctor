@@ -4,6 +4,7 @@ import 'package:pr_doctor/screens/main_screen/home_screen.dart';
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
   final String title;
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -23,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
                 textScaleFactor: 1.6,
                 style: TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Montserrat',
+                    fontFamily: 'Montserrat-Bold',
                     fontWeight: FontWeight.bold),
               ),
               radius: 50.0,
