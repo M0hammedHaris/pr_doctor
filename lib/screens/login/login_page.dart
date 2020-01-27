@@ -20,7 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Container(
         child: ListView(
           children: <Widget>[
@@ -37,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: <Widget>[
                   FadeAnimation(
-                      1.8,
+                      1.5,
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
@@ -45,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                  color: Color.fromRGBO(143, 148, 251, .2),
+                                  color: Color.fromRGBO(143, 148, 251, .25),
                                   blurRadius: 20.0,
                                   offset: Offset(0, 10))
                             ]),
@@ -70,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                               padding: EdgeInsets.all(8.0),
                               child: TextField(
                                 controller: _age,
+                                keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "Age",
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 30,
                   ),
                   FadeAnimation(
-                      2,
+                      1.8,
                       GestureDetector(
                         child: Container(
                           height: 50,
@@ -106,17 +106,13 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         onTap: () async {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-                          // if (_userName.text != '' && _age.text != '') {
-                          //   final database = Provider.of<AppDatabase>(context, listen: false);
-                          //   // _navigate(_userName.text, _age.text);
-                          //    final data = await database.getAllData();
-                          //   print(data);
-                          // } else {
-                          //   Toast.show("Enter user name and age", context,
-                          //       gravity: Toast.CENTER,
-                          //       duration: Toast.LENGTH_LONG);
-                          // }
+                          if (_userName.text != '' && _age.text != '') {
+                            _navigate(_userName.text, _age.text);
+                          } else {
+                            Toast.show("Enter user name and age", context,
+                                gravity: Toast.CENTER,
+                                duration: Toast.LENGTH_LONG);
+                          }
                         },
                       )),
                 ],
@@ -128,13 +124,16 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _navigate(String name, String age) {
+  void _navigate(String name, String age) async {
     final database = Provider.of<AppDatabase>(context, listen: false);
-    final data = DataBase(id: 1, userName: name, age: age,validate: true);
-    database.updateTask(data);
+    final data = DataBase(id: 1, userName: name, age: age, validate: true);
+    await database.insertTask(data);
+    if (data.validate) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ));
+    }
   }
 }
-// Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                   builder: (context) => HomeScreen()));

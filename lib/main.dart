@@ -6,20 +6,20 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
-  }
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      create: (_)=>AppDatabase(),
-      child: MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.cyan,
-      ),
-      home: LoginPage(),
-    )
-    );
+        create: (_) => AppDatabase(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.cyan,
+          ),
+          home: SplashScreen(),
+        ));
   }
 }

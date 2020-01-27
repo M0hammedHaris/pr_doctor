@@ -3,6 +3,8 @@ import 'package:pr_doctor/screens/botscreen/message_format.dart';
 import 'package:flutter_dialogflow_v2/flutter_dialogflow.dart';
 
 class ChatBot extends StatefulWidget {
+  ChatBot(this.userName);
+  final String userName;
   @override
   _ChatBotState createState() => _ChatBotState();
 }
@@ -41,7 +43,7 @@ class _ChatBotState extends State<ChatBot> {
     _messageQuery.clear();
     MessageFormat message = new MessageFormat(
       text: text,
-      name: "Haris",
+      name: widget.userName,
       type: true,
     );
     setState(() {

@@ -29,6 +29,8 @@ dependencies:
   moor_flutter: ^2.0.0
   provider: ^4.0.1
   toast: ^0.1.5
+  shimmer: ^1.0.1
+  flutter_svg: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +74,9 @@ flutter:
         - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 700
 
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
