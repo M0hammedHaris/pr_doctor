@@ -13,26 +13,34 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Personal Assistance',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+          title: Text(
+            'Personal Assistance',
+            style: TextStyle(color: Colors.white),
+          ),
+          flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                Colors.cyan,
+                Colors.cyan[200],
+              ])))),
       body: Center(
           child: Padding(
-            padding: EdgeInsets.all(5.0),
-            child: ListView(
-        children: <Widget>[
-          Text("Daily Tips",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 40.0,
-                          fontFamily: "Montserrat",
-                          letterSpacing: 0.5,
-                        )),
-        ],
-      ),
-          )),
+        padding: EdgeInsets.all(5.0),
+        child: ListView(
+          children: <Widget>[
+            Text("Daily Tips",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 35.0,
+                  fontFamily: "Montserrat",
+                  letterSpacing: 0.5,
+                )),
+          ],
+        ),
+      )),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.chat_bubble_outline),
           onPressed: () {

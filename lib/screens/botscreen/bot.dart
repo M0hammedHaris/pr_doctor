@@ -74,8 +74,19 @@ class _ChatBotState extends State<ChatBot> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chat Bot",style: TextStyle(color: Colors.white),),
-      ),
+          title: Text(
+            "Chat Bot",
+            style: TextStyle(color: Colors.white),
+          ),
+          flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                Colors.cyan,
+                Colors.cyan[200],
+              ])))),
       body: Column(children: <Widget>[
         Flexible(
             child: ListView.builder(
