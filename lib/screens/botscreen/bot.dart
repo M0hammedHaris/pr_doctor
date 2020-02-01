@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pr_doctor/screens/botscreen/message_format.dart';
 import 'package:flutter_dialogflow_v2/flutter_dialogflow.dart';
+import 'package:toast/toast.dart';
 
 class ChatBot extends StatefulWidget {
   ChatBot(this.userName);
@@ -12,17 +13,30 @@ class ChatBot extends StatefulWidget {
 class _ChatBotState extends State<ChatBot> {
   final List<MessageFormat> _messages = <MessageFormat>[];
   final TextEditingController _messageQuery = TextEditingController();
+  bool _buttonEnabled = false;
+  final _formkey = GlobalKey<FormState>();
 
   Widget _queryInputWidget(BuildContext context) {
-    return Container(
+    return Form(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Row(
           children: <Widget>[
             Flexible(
-              child: TextField(
+              child: TextFormField(
+                key: _formkey,
                 controller: _messageQuery,
-                onSubmitted: _submitQuery,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Enter the Text';
+                  }
+                },
+                onChanged: (value) {
+                  {
+                    setState(() {
+                      _buttonEnabled = true;
+                    });
+                }},
                 decoration:
                     InputDecoration.collapsed(hintText: "Send a message"),
               ),
@@ -30,8 +44,13 @@ class _ChatBotState extends State<ChatBot> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () => _submitQuery(_messageQuery.text)),
+                  icon: Icon(
+                    Icons.send,
+                    color: _buttonEnabled ? Colors.cyan : Colors.grey,
+                  ),
+                  onPressed: () {
+                      _buttonEnabled?_submitQuery(_messageQuery.text):null;
+                  }),
             ),
           ],
         ),
@@ -48,6 +67,7 @@ class _ChatBotState extends State<ChatBot> {
     );
     setState(() {
       _messages.insert(0, message);
+      _buttonEnabled =false;
     });
     _dialogFlowResponse(text);
   }

@@ -14,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String name;
   TextEditingController _changedName = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   getNameFromDb() async {
     final database = Provider.of<AppDatabase>(context, listen: false);
@@ -26,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getNameFromDb();
   }
@@ -34,29 +34,34 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(
-                top: 25.0, left: 8.0, bottom: 10.0, right: 10.0),
+                top: 25.0, left: 7.0, bottom: 10.0, right: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                FloatingActionButton(
+                  heroTag: 'drawer',
+                  elevation: 0,
+                  child: const Icon(Icons.menu,color: Colors.cyan,),
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    _scaffoldKey.currentState.openDrawer();
+                  },
+                ),
 
-               IconButton(
-                  icon: Icon(Icons.menu),
-                  color: Colors.cyan,
-                  visualDensity: VisualDensity(horizontal: 1.5,vertical: 1.5),
+                 FloatingActionButton(
+                   heroTag: 'search',
+                  elevation: 0,
+                  child: const Icon(Icons.search,color: Colors.cyan,),
+                  backgroundColor: Colors.white,
                   onPressed: () {
                   },
                 ),
-                IconButton(
-                  icon: Icon(Icons.search),
-                  color: Colors.cyan,
-                  visualDensity: VisualDensity(horizontal: 1.5,vertical: 1.5),
-                  onPressed: () {},
-                )
               ],
             ),
           ),
@@ -64,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 top: 10.0, left: 8.0 ,right: 8.0),child:Container(
             padding: EdgeInsets.only(
                 top: 10.0, left: 8.0, right: 8.0),
-            height: MediaQuery.of(context).size.height - 100,
+            height: MediaQuery.of(context).size.height - 120,
             child: Padding(
               padding: EdgeInsets.all(5.0),
               child: ListView(
@@ -100,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: _drawer(),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'chatScreen',
           child: Icon(Icons.chat_bubble_outline),
           onPressed: () {
             Navigator.push(context,
@@ -228,6 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
         data.copyWith(userName: _changedName.text, id: 1, validate: true));
     setState(() {
       getNameFromDb();
+      _changedName.text='';
     });
   }
 }
