@@ -3,6 +3,7 @@ import 'package:pr_doctor/screens/botscreen/bot.dart';
 import 'package:pr_doctor/screens/login/login_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pr_doctor/database/database.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -35,78 +36,90 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(
-                top: 25.0, left: 7.0, bottom: 10.0, right: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                FloatingActionButton(
-                  heroTag: 'drawer',
-                  elevation: 0,
-                  child: const Icon(Icons.menu,color: Colors.cyan,),
-                  backgroundColor: Colors.white,
-                  onPressed: () {
-                    _scaffoldKey.currentState.openDrawer();
-                  },
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.cyan),
+      ),
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(
+          content: Text('Tap back again to leave'),
+          duration: const Duration(milliseconds: 500),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                height: MediaQuery.of(context).size.height - 120,
+                child: ListView(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("Health",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 30.0,
+                                  fontFamily: "Montserrat",
+                                  letterSpacing: 0.5,
+                                )),
+                                Text("Hacks",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 30.0,
+                                  fontFamily: "Montserrat",
+                                  letterSpacing: 0.5,
+                                )),
+                          ],
+                        ),Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("The ",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.0,
+                                  fontFamily: "Montserrat",
+                                  letterSpacing: 0.5,
+                                )),
+                                Text("Siddha ",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 15.0,
+                                  fontFamily: "Montserrat",
+                                  letterSpacing: 0.5,
+                                )),
+                                Text("way",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.0,
+                                  fontFamily: "Montserrat",
+                                  letterSpacing: 0.5,
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-
-                 FloatingActionButton(
-                   heroTag: 'search',
-                  elevation: 0,
-                  child: const Icon(Icons.search,color: Colors.cyan,),
-                  backgroundColor: Colors.white,
-                  onPressed: () {
-                  },
-                ),
-              ],
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(
-                top: 10.0, left: 8.0 ,right: 8.0),child:Container(
-            padding: EdgeInsets.only(
-                top: 10.0, left: 8.0, right: 8.0),
-            height: MediaQuery.of(context).size.height - 120,
-            child: Padding(
-              padding: EdgeInsets.all(5.0),
-              child: ListView(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Text("Welcome",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 30.0,
-                            fontFamily: "Montserrat",
-                            letterSpacing: 0.5,
-                          )),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(name,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 25.0,
-                            fontFamily: "Montserrat",
-                          )),
-                    ],
-                  )
-                ],
               ),
-            ),
-          ))
-        ],
+            )
+          ],
+        ),
       ),
       drawer: _drawer(),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'chatScreen',
-          child: Icon(Icons.chat_bubble_outline),
+      floatingActionButton: FloatingActionButton.extended(
+          heroTag: 'chatScreen',
+          label: Text(
+            'Ask here',
+            style: TextStyle(color: Colors.white),
+          ),
+          icon: Icon(
+            Icons.chat_bubble_outline,
+            color: Colors.white,
+          ),
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => ChatBot(name)));
@@ -234,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
         data.copyWith(userName: _changedName.text, id: 1, validate: true));
     setState(() {
       getNameFromDb();
-      _changedName.text='';
+      _changedName.text = '';
     });
   }
 }

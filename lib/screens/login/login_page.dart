@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _userName = TextEditingController();
   TextEditingController _age = TextEditingController();
-  int _groupValueMale = 0,_groupValueFemale =1;
+  int _groupValueMale = 0, _groupValueFemale = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
                       fit: BoxFit.contain)),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
               child: Column(
                 children: <Widget>[
                   FadeAnimation(
@@ -79,35 +79,48 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                children: <Widget>[
-                                 Radio(
-                                   value: 0,
-                                   groupValue: _groupValueMale,
-                                   onChanged: (value){
-                                     setState(() {
-                                       _groupValueMale = 0;
-                                       _groupValueFemale =1;
-                                     });
-                                   },
-                                 ),
-                                  Text('Male',style: TextStyle(color:_groupValueMale==0? Colors.grey[600]:Colors.grey[400]),),
-                                  SizedBox(width: 20.0,),
-                                  Radio(
-                                   value: 0,
-                                   groupValue: _groupValueFemale,
-                                   onChanged: (value){
-                                     setState(() {
-                                       _groupValueFemale = 0;
-                                       _groupValueMale =1;
-                                     });
-                                   },
-                                 ),
-                                  Text('Female',style: TextStyle(color: _groupValueFemale==0? Colors.grey[600]:Colors.grey[400]),),
-                                ],
-                              )
-                            )
+                                padding: EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Radio(
+                                      value: 0,
+                                      groupValue: _groupValueMale,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _groupValueMale = 0;
+                                          _groupValueFemale = 1;
+                                        });
+                                      },
+                                    ),
+                                    Text(
+                                      'Male',
+                                      style: TextStyle(
+                                          color: _groupValueMale == 0
+                                              ? Colors.grey[600]
+                                              : Colors.grey[400]),
+                                    ),
+                                    SizedBox(
+                                      width: 20.0,
+                                    ),
+                                    Radio(
+                                      value: 0,
+                                      groupValue: _groupValueFemale,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _groupValueFemale = 0;
+                                          _groupValueMale = 1;
+                                        });
+                                      },
+                                    ),
+                                    Text(
+                                      'Female',
+                                      style: TextStyle(
+                                          color: _groupValueFemale == 0
+                                              ? Colors.grey[600]
+                                              : Colors.grey[400]),
+                                    ),
+                                  ],
+                                ))
                           ],
                         ),
                       )),
@@ -158,8 +171,9 @@ class _LoginPageState extends State<LoginPage> {
   void _navigate(String name, String age) async {
     bool validation;
     final database = Provider.of<AppDatabase>(context, listen: false);
-    _groupValueMale==0 ?validation = true:validation =false;
-    final data = DataBase(id: 1, userName: name, age: age, validate: validation);
+    _groupValueMale == 0 ? validation = true : validation = false;
+    final data =
+        DataBase(id: 1, userName: name, age: age, validate: validation);
     print(data);
     await database.insertTask(data);
     if (data.validate) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pr_doctor/screens/botscreen/message_format.dart';
 import 'package:flutter_dialogflow_v2/flutter_dialogflow.dart';
-import 'package:toast/toast.dart';
+import 'package:speech_recognition/speech_recognition.dart';
 
 class ChatBot extends StatefulWidget {
   ChatBot(this.userName);
@@ -12,48 +12,121 @@ class ChatBot extends StatefulWidget {
 
 class _ChatBotState extends State<ChatBot> {
   final List<MessageFormat> _messages = <MessageFormat>[];
-  final TextEditingController _messageQuery = TextEditingController();
-  bool _buttonEnabled = false;
-  final _formkey = GlobalKey<FormState>();
+  TextEditingController _messageQuery;
+  bool _buttonEnabled = false, _speechEnabled = false;
+
+  SpeechRecognition _speechRecognition;
+  bool _isAvailable = false, _isListening = false;
+  String resultText = '';
+
+  void initSpeechRecognizer() {
+    _speechRecognition = SpeechRecognition();
+    _speechRecognition.setAvailabilityHandler((result) {
+      setState(() {
+        _isAvailable = result;
+      });
+    });
+
+    _speechRecognition.setRecognitionStartedHandler(() {
+      setState(() => _isListening = true);
+    });
+
+    _speechRecognition.setRecognitionResultHandler((text) {
+      setState(() => resultText = text);
+    });
+
+    _speechRecognition.setRecognitionCompleteHandler(() {
+      setState(() => _isListening = false);
+    });
+
+    _speechRecognition
+        .activate()
+        .then((value) => setState(() => _isAvailable = value));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initSpeechRecognizer();
+    _messageQuery = new TextEditingController();
+  }
 
   Widget _queryInputWidget(BuildContext context) {
-    return Form(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              child: TextFormField(
-                key: _formkey,
-                controller: _messageQuery,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter the Text';
-                  }
-                },
-                onChanged: (value) {
-                  {
-                    setState(() {
-                      _buttonEnabled = true;
-                    });
-                }},
-                decoration:
-                    InputDecoration.collapsed(hintText: "Send a message"),
-              ),
-            ),
-            Container(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          GestureDetector(
+            child: Container(
               margin: EdgeInsets.symmetric(horizontal: 4.0),
-              child: IconButton(
-                  icon: Icon(
-                    Icons.send,
-                    color: _buttonEnabled ? Colors.cyan : Colors.grey,
-                  ),
-                  onPressed: () {
-                      _buttonEnabled?_submitQuery(_messageQuery.text):null;
-                  }),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.mic,
+                  color: Colors.white,
+                  size: 30.0,
+                ),
+              ),
+              decoration:
+                  BoxDecoration(color: Colors.cyan, shape: BoxShape.circle),
             ),
-          ],
-        ),
+            onLongPress: () {
+              if (_isAvailable && !_isListening) {
+                _speechRecognition
+                    .listen(locale: "en_US")
+                    .then((value) => setState(() {
+                          print(value);
+                        }));
+              }
+            },
+            onLongPressEnd: (value) {
+              if (_isListening) {
+                _speechRecognition.stop().then((value) => setState(() {
+                      _isListening = value;
+                      _speechEnabled = true;
+                      _buttonEnabled = true;
+                    }));
+              }
+              print(_messageQuery.text);
+            },
+          ),
+          Flexible(
+            child: _speechEnabled
+                ? Text(resultText)
+                : TextField(
+                    controller: _messageQuery,
+                    onChanged: (value) {
+                      {
+                        setState(() {
+                          _buttonEnabled = true;
+                        });
+                      }
+                    },
+                    decoration: InputDecoration.collapsed(
+                        hintText: "Tell me your health issue"),
+                  ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 4.0),
+            child: IconButton(
+                icon: Icon(
+                  Icons.send,
+                  color: _buttonEnabled ? Colors.cyan : Colors.grey,
+                ),
+                onPressed: () {
+                  String _query = _speechEnabled ? resultText:_messageQuery.text;
+                  _buttonEnabled ? _submitQuery(_query) : null;
+                  setState(() {
+                    resultText='';
+                    _speechEnabled = false;
+                  });
+                }),
+          ),
+        ],
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
       ),
     );
   }
@@ -67,7 +140,7 @@ class _ChatBotState extends State<ChatBot> {
     );
     setState(() {
       _messages.insert(0, message);
-      _buttonEnabled =false;
+      _buttonEnabled = false;
     });
     _dialogFlowResponse(text);
   }
@@ -96,19 +169,14 @@ class _ChatBotState extends State<ChatBot> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            "Chat Bot",
-            style: TextStyle(color: Colors.white),
-          ),
-          flexibleSpace: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: <Color>[
-                Colors.cyan,
-                Colors.cyan[200],
-              ])))),
+        title: Text(
+          "Chat Bot",
+          style: TextStyle(color: Colors.cyan),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.cyan),
+        elevation: 0,
+      ),
       body: Column(children: <Widget>[
         Flexible(
             child: ListView.builder(
