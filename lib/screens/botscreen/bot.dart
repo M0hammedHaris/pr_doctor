@@ -35,7 +35,7 @@ class _ChatBotState extends State<ChatBot> {
       setState(() => resultText = text);
     });
 
-    _speechRecognition.setRecognitionCompleteHandler(() {
+    _speechRecognition.setRecognitionCompleteHandler((value) {
       setState(() => _isListening = false);
     });
 
@@ -71,24 +71,15 @@ class _ChatBotState extends State<ChatBot> {
               decoration:
                   BoxDecoration(color: Colors.cyan, shape: BoxShape.circle),
             ),
-            onLongPress: () {
+            onTap: () {
               if (_isAvailable && !_isListening) {
                 _speechRecognition
                     .listen(locale: "en_US")
                     .then((value) => setState(() {
-                          print(value);
+                          _speechEnabled = true;
+                          _buttonEnabled = true;
                         }));
               }
-            },
-            onLongPressEnd: (value) {
-              if (_isListening) {
-                _speechRecognition.stop().then((value) => setState(() {
-                      _isListening = value;
-                      _speechEnabled = true;
-                      _buttonEnabled = true;
-                    }));
-              }
-              print(_messageQuery.text);
             },
           ),
           Flexible(
@@ -115,10 +106,11 @@ class _ChatBotState extends State<ChatBot> {
                   color: _buttonEnabled ? Colors.cyan : Colors.grey,
                 ),
                 onPressed: () {
-                  String _query = _speechEnabled ? resultText:_messageQuery.text;
+                  String _query =
+                      _speechEnabled ? resultText : _messageQuery.text;
                   _buttonEnabled ? _submitQuery(_query) : null;
                   setState(() {
-                    resultText='';
+                    resultText = '';
                     _speechEnabled = false;
                   });
                 }),

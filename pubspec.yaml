@@ -32,7 +32,10 @@ dependencies:
   shimmer: ^1.0.1
   flutter_svg: ^0.17.0
   double_back_to_close_app: ^0.1.2
-  speech_recognition: ^0.3.0+1
+  speech_recognition:
+    git:
+        url: https://github.com/webeverde/speech_recognition.git
+        ref: master
 
 dev_dependencies:
   flutter_test:

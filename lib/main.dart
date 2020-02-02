@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         create: (_) => AppDatabase(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'PR.Doctor',
           theme: ThemeData(
             primaryColor: Colors.cyan,
             accentColor: Colors.cyan[400]
