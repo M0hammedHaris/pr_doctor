@@ -26,7 +26,7 @@ class MessageFormat extends StatelessWidget {
             Text(this.name, style: TextStyle(fontWeight: FontWeight.bold)),
             Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(text),
+              child: Text(text,textScaleFactor: 1,),
             ),
           ],
         ),
@@ -46,7 +46,7 @@ class MessageFormat extends StatelessWidget {
             ),
             Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(text),
+              child: Text(text,textScaleFactor: 1),
             ),
           ],
         ),

@@ -4,8 +4,9 @@ import 'package:flutter_dialogflow_v2/flutter_dialogflow.dart';
 import 'package:speech_recognition/speech_recognition.dart';
 
 class ChatBot extends StatefulWidget {
-  ChatBot(this.userName);
+  ChatBot(this.userName, this.message);
   final String userName;
+  final String message;
   @override
   _ChatBotState createState() => _ChatBotState();
 }
@@ -13,7 +14,7 @@ class ChatBot extends StatefulWidget {
 class _ChatBotState extends State<ChatBot> {
   final List<MessageFormat> _messages = <MessageFormat>[];
   TextEditingController _messageQuery;
-  bool _buttonEnabled = false, _speechEnabled = false;
+  bool _buttonEnabled = false, _speechEnabled = false, _isLoading = true;
 
   SpeechRecognition _speechRecognition;
   bool _isAvailable = false, _isListening = false;
@@ -44,10 +45,26 @@ class _ChatBotState extends State<ChatBot> {
         .then((value) => setState(() => _isAvailable = value));
   }
 
+  void initialQuery() {
+    if (widget.message == null) {
+      MessageFormat message = new MessageFormat(
+        text: 'Good day to you ${widget.userName}. \nHow can i assist you?',
+        name: "PR.DR",
+        type: false,
+      );
+      setState(() {
+        _messages.insert(0, message);
+      });
+    } else {
+      _dialogFlowResponse(widget.message);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     initSpeechRecognizer();
+    initialQuery();
     _messageQuery = new TextEditingController();
   }
 
@@ -138,7 +155,10 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   void _dialogFlowResponse(query) async {
-    _messageQuery.clear();
+    print(_messageQuery);
+    if (_messageQuery != null) {
+      _messageQuery.clear();
+    }
     AuthGoogle authGoogle =
         await AuthGoogle(fileJson: "assets/pr-dr-ghjoas-c64d83ea1f39.json")
             .build();
@@ -154,6 +174,7 @@ class _ChatBotState extends State<ChatBot> {
     );
     setState(() {
       _messages.insert(0, message);
+      _isLoading = false;
     });
   }
 
@@ -170,13 +191,13 @@ class _ChatBotState extends State<ChatBot> {
         elevation: 0,
       ),
       body: Column(children: <Widget>[
-        Flexible(
-            child: ListView.builder(
-          padding: EdgeInsets.all(8.0),
-          reverse: true, //To keep the latest messages at the bottom
-          itemBuilder: (_, int index) => _messages[index],
-          itemCount: _messages.length,
-        )),
+         Flexible(
+                child: ListView.builder(
+                padding: EdgeInsets.all(8.0),
+                reverse: true, //To keep the latest messages at the bottom
+                itemBuilder: (_, int index) => _messages[index],
+                itemCount: _messages.length,
+              )),
         Divider(height: 1.0),
         Container(
           decoration: new BoxDecoration(color: Theme.of(context).cardColor),

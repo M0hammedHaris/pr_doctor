@@ -32,6 +32,131 @@ class _HomeScreenState extends State<HomeScreen> {
     getNameFromDb();
   }
 
+  Widget _drawer() {
+    return Drawer(
+      elevation: 20,
+      child: ListView(
+        children: <Widget>[
+          DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: <Color>[Colors.cyan, Colors.cyan[100]]),
+              ),
+              child: null),
+          ListTile(
+              leading: Icon(Icons.adb, color: Colors.black),
+              title: Text('About'),
+              onTap: () {
+                Navigator.pop(context);
+              }),
+          Divider(),
+          ListTile(
+              leading: Icon(Icons.help_outline, color: Colors.black),
+              title: Text('Help'),
+              onTap: () {
+                Navigator.pop(context);
+              }),
+          Divider(),
+          ListTile(
+              leading: Icon(Icons.exit_to_app, color: Colors.black),
+              title: Text('Log Out'),
+              onTap: () {
+                Navigator.pop(context);
+                _logOutAlert();
+              }),
+          Divider(),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _logOutAlert() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+          ),
+          title: Text(
+            'Log Out',
+            textScaleFactor: 1.2,
+          ),
+          content: Text(
+            'Are you sure ?',
+            textScaleFactor: 1,
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _logout();
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Regret'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _userAlert() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+          ),
+          title: Text(
+            'Hello $name',
+            textScaleFactor: 1.2,
+          ),
+          content: Text(
+            'Who do I assist with?',
+            textScaleFactor: 1,
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Me'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatBot(name,null)));
+              },
+            ),
+            FlatButton(
+              child: Text('Others'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatBot(name,'Hi')));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _logout() async {
+    final database = Provider.of<AppDatabase>(context, listen: false);
+    await database.resetDb();
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontFamily: "Montserrat",
                                   letterSpacing: 0.5,
                                 )),
-                                Text("Hacks",
+                            Text("Hacks",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 30.0,
@@ -74,7 +199,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   letterSpacing: 0.5,
                                 )),
                           ],
-                        ),Row(
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text("The ",
@@ -84,14 +210,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontFamily: "Montserrat",
                                   letterSpacing: 0.5,
                                 )),
-                                Text("Siddha ",
+                            Text("Siddha ",
                                 style: TextStyle(
                                   color: Colors.green,
                                   fontSize: 15.0,
                                   fontFamily: "Montserrat",
                                   letterSpacing: 0.5,
                                 )),
-                                Text("way",
+                            Text("way",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 15.0,
@@ -121,133 +247,8 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ChatBot(name)));
+            _userAlert();
           }),
     );
-  }
-
-  Widget _drawer() {
-    return Drawer(
-      elevation: 20,
-      child: ListView(
-        children: <Widget>[
-          DrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: <Color>[Colors.cyan, Colors.cyan[100]]),
-              ),
-              child: null),
-          ListTile(
-              leading: Icon(Icons.person_pin, color: Colors.black),
-              title: Text('Change Name'),
-              onTap: () {
-                Navigator.pop(context);
-                _nameChangeAlert();
-              }),
-          Divider(),
-          ListTile(
-              leading: Icon(Icons.exit_to_app, color: Colors.black),
-              title: Text('Log Out'),
-              onTap: () {
-                Navigator.pop(context);
-                _logOutAlert();
-              }),
-          Divider(),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _logOutAlert() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Log Out',
-            textScaleFactor: 1.2,
-          ),
-          content: Text(
-            'Are you sure ?',
-            textScaleFactor: 1,
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Yes'),
-              onPressed: () {
-                _logout();
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('Regret'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _nameChangeAlert() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Enter new name',
-            textScaleFactor: 1.2,
-          ),
-          content: TextField(
-            controller: _changedName,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "New user Name",
-                hintStyle: TextStyle(color: Colors.grey[400])),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Yes'),
-              onPressed: () {
-                _updateUserName();
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _logout() async {
-    final database = Provider.of<AppDatabase>(context, listen: false);
-    await database.resetDb();
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ));
-  }
-
-  void _updateUserName() async {
-    final database = Provider.of<AppDatabase>(context, listen: false);
-    final data = await database.getAllData();
-    database.updateTask(
-        data.copyWith(userName: _changedName.text, id: 1, validate: true));
-    setState(() {
-      getNameFromDb();
-      _changedName.text = '';
-    });
   }
 }
