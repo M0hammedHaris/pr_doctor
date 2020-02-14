@@ -30,7 +30,7 @@
 .pub/
 /build/
 
-/assets/pr-dr-ghjoas-c64d83ea1f39.json
+*.json
 
 # Web related
 lib/generated_plugin_registrant.dart

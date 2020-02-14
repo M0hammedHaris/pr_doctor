@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pr_doctor/screens/login/login_page.dart';
 import 'package:pr_doctor/screens/splash_screen/splash_screen.dart';
 import 'database/database.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +14,10 @@ class MyApp extends StatelessWidget {
         create: (_) => AppDatabase(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'PR.Doctor',
           theme: ThemeData(
-            primarySwatch: Colors.cyan,
+            primaryColor: Colors.cyan,
+            accentColor: Colors.cyan[400]
           ),
           home: SplashScreen(),
         ));

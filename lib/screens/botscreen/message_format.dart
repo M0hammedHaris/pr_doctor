@@ -11,7 +11,13 @@ class MessageFormat extends StatelessWidget {
     return <Widget>[
       Container(
         margin: const EdgeInsets.only(right: 16.0),
-        child: CircleAvatar(child: Text('Bot')),
+        child: CircleAvatar(
+          child: Text(
+            'Bot',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.cyan,
+        ),
       ),
       Expanded(
         child: Column(
@@ -20,7 +26,7 @@ class MessageFormat extends StatelessWidget {
             Text(this.name, style: TextStyle(fontWeight: FontWeight.bold)),
             Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(text),
+              child: Text(text,textScaleFactor: 1,),
             ),
           ],
         ),
@@ -34,18 +40,22 @@ class MessageFormat extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Text(this.name),
+            Text(
+              this.name,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             Container(
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(text),
+              child: Text(text,textScaleFactor: 1),
             ),
           ],
         ),
       ),
       Container(
-        margin: const EdgeInsets.only(left: 16.0),
-        child: CircleAvatar(child: new Text(this.name[0])),
-      ),
+          margin: const EdgeInsets.only(left: 16.0),
+          child: CircleAvatar(
+              child: Icon(Icons.person, color: Colors.white),
+              backgroundColor: Colors.cyan)),
     ];
   }
 
