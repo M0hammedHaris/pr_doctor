@@ -3,12 +3,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:pr_doctor/database/data_classes.dart';
-class Ingredient extends StatefulWidget {
+class TipsScree extends StatefulWidget {
   @override
-  _IngredientState createState() => _IngredientState();
+  _TipsScreeState createState() => _TipsScreeState();
 }
 
-class _IngredientState extends State<Ingredient> {
+class _TipsScreeState extends State<TipsScree> {
 
   List<IngredientList> _ingList = List<IngredientList>();
 
