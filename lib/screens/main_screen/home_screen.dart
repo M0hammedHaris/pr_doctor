@@ -1,9 +1,13 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:pr_doctor/screens/botscreen/bot.dart';
+import 'package:pr_doctor/screens/ingredent_screen/ingredient.dart';
 import 'package:pr_doctor/screens/login/login_page.dart';
+import 'package:pr_doctor/screens/map_screen/map.dart';
 import 'package:provider/provider.dart';
 import 'package:pr_doctor/database/database.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'package:toast/toast.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -14,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String name;
-  TextEditingController _changedName = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   getNameFromDb() async {
@@ -30,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getNameFromDb();
+    _checkConnection();
   }
 
   Widget _drawer() {
@@ -43,6 +47,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     colors: <Color>[Colors.cyan, Colors.cyan[100]]),
               ),
               child: null),
+          ListTile(
+              leading: Icon(Icons.map, color: Colors.black),
+              title: Text('Find stores'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MapScreen()));
+              }),
+          Divider(),
+           ListTile(
+              leading: Icon(Icons.map, color: Colors.black),
+              title: Text('Ingredient List'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Ingredient()));
+              }),
+          Divider(),
           ListTile(
               leading: Icon(Icons.adb, color: Colors.black),
               title: Text('About'),
@@ -76,9 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           title: Text(
             'Log Out',
             textScaleFactor: 1.2,
@@ -113,15 +134,14 @@ class _HomeScreenState extends State<HomeScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           title: Text(
             'Hello $name',
             textScaleFactor: 1.2,
           ),
           content: Text(
-            'Who do I assist with?',
+            'Whom should I assist?',
             textScaleFactor: 1,
           ),
           actions: <Widget>[
@@ -129,16 +149,20 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text('Me'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatBot(name,null)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChatBot(name, null)));
               },
             ),
             FlatButton(
               child: Text('Others'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatBot(name,'Hi')));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChatBot(name, 'Hi')));
               },
             ),
           ],
@@ -154,6 +178,30 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => LoginPage(),
+        ));
+  }
+
+  _checkConnection() async {
+    await DataConnectionChecker().onStatusChange.listen((status) {
+      switch (status) {
+        case DataConnectionStatus.connected:
+          Toast.show('You are online', context, gravity: Toast.CENTER);
+          break;
+        case DataConnectionStatus.disconnected:
+          Toast.show('You are offline', context, gravity: Toast.CENTER);
+          break;
+      }
+    });
+    await DataConnectionChecker().checkInterval;
+  }
+
+  Widget text(String txt, double fSize, Color color) {
+    return Text(txt,
+        style: TextStyle(
+          color: Colors.green,
+          fontSize: fSize,
+          fontFamily: "Montserrat",
+          letterSpacing: 0.5,
         ));
   }
 
@@ -184,46 +232,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text("Health",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 30.0,
-                                  fontFamily: "Montserrat",
-                                  letterSpacing: 0.5,
-                                )),
-                            Text("Hacks",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 30.0,
-                                  fontFamily: "Montserrat",
-                                  letterSpacing: 0.5,
-                                )),
+                            text('Health',30.0,Colors.green),
+                            text('Hacks',30.0,Colors.black),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text("The ",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontFamily: "Montserrat",
-                                  letterSpacing: 0.5,
-                                )),
-                            Text("Siddha ",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 15.0,
-                                  fontFamily: "Montserrat",
-                                  letterSpacing: 0.5,
-                                )),
-                            Text("way",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontFamily: "Montserrat",
-                                  letterSpacing: 0.5,
-                                )),
+                            text('The',15.0,Colors.black),
+                            text('Siddha',15.0,Colors.green),
+                            text('way',15.0,Colors.black),
                           ],
                         ),
                       ],

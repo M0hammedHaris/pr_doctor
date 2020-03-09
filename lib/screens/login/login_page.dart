@@ -176,12 +176,10 @@ class _LoginPageState extends State<LoginPage> {
         DataBase(id: 1, userName: name, age: age, validate: validation);
     print(data);
     await database.insertTask(data);
-    if (data.validate) {
-      Navigator.pushReplacement(
+    Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => HomeScreen(),
           ));
-    }
   }
 }
