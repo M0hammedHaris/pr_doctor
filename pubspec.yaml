@@ -30,7 +30,6 @@ dependencies:
   provider: ^4.0.1
   toast: ^0.1.5
   shimmer: ^1.0.1
-  flutter_svg: ^0.17.0
   double_back_to_close_app: ^0.1.2
   speech_recognition:
     git:
@@ -40,6 +39,7 @@ dependencies:
   google_map_polyline:
   geolocator: ^5.1.5
   data_connection_checker: ^0.3.4
+  flutter_webview_plugin: ^0.3.10+1
 
 dev_dependencies:
   flutter_test:
