@@ -1,0 +1,5 @@
+Home Screen
+http://www.json-generator.com/api/json/get/cpGhKiStOW?indent=2
+
+content Screen
+http://www.json-generator.com/api/json/get/bTMziZPxnS?indent=2

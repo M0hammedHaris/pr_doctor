@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -30,12 +30,16 @@ dependencies:
   provider: ^4.0.1
   toast: ^0.1.5
   shimmer: ^1.0.1
-  flutter_svg: ^0.17.0
   double_back_to_close_app: ^0.1.2
   speech_recognition:
     git:
         url: https://github.com/webeverde/speech_recognition.git
         ref: master
+  google_maps_flutter: ^0.5.22+1
+  google_map_polyline:
+  geolocator: ^5.1.5
+  data_connection_checker: ^0.3.4
+  flutter_webview_plugin: ^0.3.10+1
 
 dev_dependencies:
   flutter_test:

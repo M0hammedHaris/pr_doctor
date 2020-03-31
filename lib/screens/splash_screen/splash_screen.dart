@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _mockCheckForSession().then((onValue){
+    _mockCheckForSession().then((onValue) {
       validate();
     });
   }
@@ -49,7 +49,9 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            Opacity(opacity: 0.5,),
+            Opacity(
+              opacity: 0.5,
+            ),
             Shimmer.fromColors(
               period: Duration(milliseconds: 1500),
               baseColor: Colors.cyan,
@@ -73,7 +75,10 @@ class _SplashScreenState extends State<SplashScreen> {
                               ]),
                         ),
                       ),
-                      Text('Your personal assistant',textScaleFactor: 1,)
+                      Text(
+                        'Your personal assistant',
+                        textScaleFactor: 1,
+                      )
                     ],
                   )),
             ),

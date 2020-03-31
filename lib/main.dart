@@ -16,9 +16,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'PR.Doctor',
           theme: ThemeData(
-            primaryColor: Colors.cyan,
-            accentColor: Colors.cyan[400]
-          ),
+              primaryColor: Colors.cyan, accentColor: Colors.cyan[400]),
           home: SplashScreen(),
         ));
   }

@@ -125,7 +125,9 @@ class _ChatBotState extends State<ChatBot> {
                 onPressed: () {
                   String _query =
                       _speechEnabled ? resultText : _messageQuery.text;
-                  _buttonEnabled ? _submitQuery(_query) : null;
+                  if (_buttonEnabled) {
+                    _submitQuery(_query);
+                  }
                   setState(() {
                     resultText = '';
                     _speechEnabled = false;
@@ -141,8 +143,9 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   void _submitQuery(String text) {
+    print(text);
     _messageQuery.clear();
-    MessageFormat message = new MessageFormat(
+    MessageFormat  message = new MessageFormat(
       text: text,
       name: widget.userName,
       type: true,
@@ -155,7 +158,6 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   void _dialogFlowResponse(query) async {
-    print(_messageQuery);
     if (_messageQuery != null) {
       _messageQuery.clear();
     }
@@ -191,13 +193,13 @@ class _ChatBotState extends State<ChatBot> {
         elevation: 0,
       ),
       body: Column(children: <Widget>[
-         Flexible(
-                child: ListView.builder(
-                padding: EdgeInsets.all(8.0),
-                reverse: true, //To keep the latest messages at the bottom
-                itemBuilder: (_, int index) => _messages[index],
-                itemCount: _messages.length,
-              )),
+        Flexible(
+            child: ListView.builder(
+          padding: EdgeInsets.all(8.0),
+          reverse: true, //To keep the latest messages at the bottom
+          itemBuilder: (_, int index) => _messages[index],
+          itemCount: _messages.length,
+        )),
         Divider(height: 1.0),
         Container(
           decoration: new BoxDecoration(color: Theme.of(context).cardColor),
