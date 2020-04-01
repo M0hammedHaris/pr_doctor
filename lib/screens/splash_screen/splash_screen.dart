@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pr_doctor/screens/main_screen/home_screen.dart';
 import 'dart:async';
 import 'package:shimmer/shimmer.dart';
-import 'package:provider/provider.dart';
-import 'package:pr_doctor/database/database.dart';
-import 'package:pr_doctor/screens/login/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key key}) : super(key: key);
@@ -19,15 +16,6 @@ class _SplashScreenState extends State<SplashScreen> {
         context, MaterialPageRoute(builder: (context) => page));
   }
 
-  validate() async {
-    final database = Provider.of<AppDatabase>(context, listen: false);
-    if (await database.getAllData() == null) {
-      navigationPage(LoginPage());
-    } else {
-      navigationPage(HomeScreen());
-    }
-  }
-
   Future<bool> _mockCheckForSession() async {
     await Future.delayed(Duration(seconds: 3), () {});
 
@@ -38,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _mockCheckForSession().then((onValue) {
-      validate();
+       navigationPage(HomeScreen());
     });
   }
 
