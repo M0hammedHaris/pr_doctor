@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pr_doctor/database/data_classes.dart';
 import 'package:pr_doctor/screens/botscreen/bot.dart';
 import 'package:pr_doctor/screens/ingredent_screen/ingredient.dart';
-import 'package:pr_doctor/screens/login/login_page.dart';
 import 'package:pr_doctor/screens/main_screen/tips_screen.dart';
 import 'package:pr_doctor/screens/map_screen/map.dart';
-import 'package:provider/provider.dart';
-import 'package:pr_doctor/database/database.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
@@ -24,15 +21,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String name;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List<HomePage> _dataList = List<HomePage>();
-
-  getNameFromDb() async {
-    final database = Provider.of<AppDatabase>(context, listen: false);
-    final data = await database.getAllData();
-
-    setState(() {
-      name = data.userName;
-    });
-  }
 
   Future<List<HomePage>> fetchNotes() async {
     var url =
@@ -51,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    getNameFromDb();
     _checkConnection();
     fetchNotes().then((value) {
       setState(() {
@@ -104,52 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pop(context);
               }),
           Divider(),
-          ListTile(
-              leading: Icon(Icons.exit_to_app, color: Colors.blue),
-              title: Text('Log Out'),
-              onTap: () {
-                Navigator.pop(context);
-                _logOutAlert();
-              }),
-          Divider(),
         ],
       ),
-    );
-  }
-
-  Future<void> _logOutAlert() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          title: Text(
-            'Log Out',
-            textScaleFactor: 1.2,
-          ),
-          content: Text(
-            'Are you sure ?',
-            textScaleFactor: 1,
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Yes'),
-              onPressed: () {
-                _logout();
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('Regret'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -194,16 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
-  }
-
-  void _logout() async {
-    final database = Provider.of<AppDatabase>(context, listen: false);
-    await database.resetDb();
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ));
   }
 
   _checkConnection() async {
@@ -283,7 +216,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 100.0,
                                 width: 100.0,
                                 child: Image(
-                                    image: NetworkImage(_dataList[index].imgUrl)),
+                                    image:
+                                        NetworkImage(_dataList[index].imgUrl)),
                               ),
                               SizedBox(
                                 width: 30.0,
@@ -297,11 +231,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      onTap :(){
-                         Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TipsScreen(_dataList[index].targetUrl)));
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    TipsScreen(_dataList[index].targetUrl)));
                       },
                     );
                   },
